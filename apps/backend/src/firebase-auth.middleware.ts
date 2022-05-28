@@ -16,7 +16,7 @@ export class FirebaseAuthMiddleware implements NestMiddleware {
         return;
       }
     } else {
-      res.status(HttpStatus.FORBIDDEN, 'unauthorised access');
+      res.status(HttpStatus.FORBIDDEN).send('token invalid');
     }
     console.log('sexy b=uoy');
     next();
