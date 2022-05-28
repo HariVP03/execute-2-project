@@ -20,6 +20,7 @@ import NextLink from "next/link";
 import { createUser, useSubscribeToUser } from "@firebase/utils";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
+import { GoogleButton } from "@components/buttons";
 export default function SignupCard() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [email, setEmail] = useState<string | undefined>();
@@ -148,6 +149,7 @@ export default function SignupCard() {
                                 Sign up
                             </Button>
                         </Stack>
+                        <GoogleButton />
                         <Stack pt={6}>
                             <Text align={"center"}>
                                 Already a user?{" "}
