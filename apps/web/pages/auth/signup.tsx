@@ -17,8 +17,15 @@ import {
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
+import { createUser } from "@firebase/utils";
 export default function SignupCard() {
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [email, setEmail] = useState<string | undefined>();
+    const [showConfirmPass, setShowConfirmPass] = useState<boolean>(false);
+    const [password, setPassword] = useState<string | undefined>();
+    const [confirmPassword, setConfirmPassword] = useState<
+        string | undefined
+    >();
 
     return (
         <Flex
@@ -40,33 +47,30 @@ export default function SignupCard() {
                     p={8}
                 >
                     <Stack spacing={4}>
-                        <HStack>
-                            <Box>
-                                <FormControl id="firstName" isRequired>
-                                    <FormLabel>First Name</FormLabel>
-                                    <Input type="text" />
-                                </FormControl>
-                            </Box>
-                            <Box>
-                                <FormControl id="lastName">
-                                    <FormLabel>Last Name</FormLabel>
-                                    <Input type="text" />
-                                </FormControl>
-                            </Box>
-                        </HStack>
                         <FormControl id="email" isRequired>
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email" />
+                            <Input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                type="email"
+                            />
                         </FormControl>
                         <FormControl id="password" isRequired>
                             <FormLabel>Password</FormLabel>
                             <InputGroup>
                                 <Input
                                     type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    isInvalid={
+                                        password ? password.length < 8 : false
+                                    }
+                                    onChange={(e) =>
+                                        setPassword(e.target.value)
+                                    }
                                 />
                                 <InputRightElement h={"full"}>
                                     <Button
-                                        variant={"ghost"}
+                                        variant={"unstyled"}
                                         onClick={() =>
                                             setShowPassword(
                                                 (showPassword) => !showPassword,
@@ -74,6 +78,39 @@ export default function SignupCard() {
                                         }
                                     >
                                         {showPassword ? (
+                                            <ViewIcon />
+                                        ) : (
+                                            <ViewOffIcon />
+                                        )}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                        </FormControl>
+                        <FormControl id="confirmPassword" isRequired>
+                            <FormLabel>Re-enter Password</FormLabel>
+                            <InputGroup>
+                                <Input
+                                    type={showConfirmPass ? "text" : "password"}
+                                    value={confirmPassword}
+                                    isInvalid={
+                                        confirmPassword
+                                            ? confirmPassword !== password
+                                            : false
+                                    }
+                                    onChange={(e) =>
+                                        setConfirmPassword(e.target.value)
+                                    }
+                                />
+                                <InputRightElement h={"full"}>
+                                    <Button
+                                        variant={"ghost"}
+                                        onClick={() =>
+                                            setShowConfirmPass(
+                                                (showPassword) => !showPassword,
+                                            )
+                                        }
+                                    >
+                                        {showConfirmPass ? (
                                             <ViewIcon />
                                         ) : (
                                             <ViewOffIcon />
@@ -90,6 +127,14 @@ export default function SignupCard() {
                                 color={"white"}
                                 _hover={{
                                     bg: "blue.500",
+                                }}
+                                disabled={
+                                    password !== confirmPassword ||
+                                    (password?.length || 0) < 8
+                                }
+                                onClick={() => {
+                                    if (password && email)
+                                        createUser(email, password);
                                 }}
                             >
                                 Sign up

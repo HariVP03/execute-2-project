@@ -81,7 +81,7 @@ export function Navbar() {
                             </Button>
                             <Button
                                 colorScheme={"orange"}
-                                onClick={() => router.push("/auth/login")}
+                                onClick={() => router.push("/auth/signup")}
                             >
                                 Signup
                             </Button>
