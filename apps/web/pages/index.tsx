@@ -1,26 +1,13 @@
 import React from "react";
-import { Flex, Button } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Flex } from "@chakra-ui/react";
+import { CallToActionWithIllustration } from "@components/CTA";
+import { Navbar } from "@components/navbar";
 
 const Home: React.FC = () => {
-    const router = useRouter();
     return (
-        <Flex direction="column" minH="100vh" align={"center"} justify="center">
-            <Button
-                mb="2rem"
-                onClick={() => {
-                    router.push("demo");
-                }}
-            >
-                Demo
-            </Button>
-            <Button
-                onClick={() => {
-                    router.push("wallet/login");
-                }}
-            >
-                Wallet
-            </Button>
+        <Flex direction="column" minH="100vh">
+            <Navbar />
+            <CallToActionWithIllustration />
         </Flex>
     );
 };
