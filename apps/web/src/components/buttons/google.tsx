@@ -22,7 +22,7 @@ const GoogleButton = () => {
             justifyContent="center"
             onClick={onClick}
         >
-            <Text m={0}>Sign in with Google</Text>
+            <Text m={0}>Continue with Google</Text>
         </Button>
     );
 };
