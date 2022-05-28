@@ -20,6 +20,7 @@ const json = {
 async function bootstrap() {
   initializeApp({ credential: admin.credential.cert(json as any) });
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   await app.listen(8888);
 }
 bootstrap();
