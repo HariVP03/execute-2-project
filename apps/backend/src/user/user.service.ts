@@ -5,15 +5,24 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
-  findOne(email: string) {
-    return `This action returns a #${email} user`;
+
+  async findOne(email: string) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return this.prisma.user.create({ data: { email, name: '' } });
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(email: string, updateUserDto: UpdateUserDto) {
+    console.log(updateUserDto);
+    return await this.prisma.user.update({
+      where: { email },
+      data: updateUserDto,
+    });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }

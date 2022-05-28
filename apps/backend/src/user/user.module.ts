@@ -10,6 +10,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 })
 export class UserModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FirebaseAuthMiddleware).forRoutes('user');
+    consumer.apply(FirebaseAuthMiddleware).forRoutes('user', 'token');
   }
 }

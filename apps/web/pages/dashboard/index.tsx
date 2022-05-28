@@ -15,19 +15,25 @@ import {
 } from "@chakra-ui/react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Dispatch, SetStateAction, useState } from "react";
-import { getUser } from "src/utils";
+import axios from "axios";
+import { getUser, updateUser } from "src/utils";
 
 const Dashboard = () => {
-    // const auth = getAuth();
-    // onAuthStateChanged(auth, (user) => {
-    //     if (user) {
-    //         user.getIdToken()
-    //             .then((token) => getUser(token))
-    //             .then((e) => {
-    //                 console.log(e);
-    //             });
-    //     }
-    // });
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            user.getIdToken()
+                .then((token) => {
+                    getUser(token, {
+                        name: "sidharth",
+                        pubicKey: "0x1Dd8D38e294D632Eab2d445beAc8340462db021d",
+                    });
+                })
+                .then((e) => {
+                    console.log(e);
+                });
+        }
+    });
 
     const [name, setName] = useState<string | undefined>();
     const [publicAddress, setPublicAddress] = useState<string | undefined>();

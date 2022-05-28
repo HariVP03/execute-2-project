@@ -7,3 +7,11 @@ export const getUser = (token: string) => {
         },
     });
 };
+
+export const updateUser = (token: string, userData: any) => {
+    return axios.post("/user", userData, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { initializeApp } from 'firebase-admin/app';
 import admin from 'firebase-admin';
+import { ValidationPipe } from '@nestjs/common';
 const json = {
   type: 'service_account',
   project_id: 'execute-30e71',
@@ -20,6 +21,7 @@ const json = {
 async function bootstrap() {
   initializeApp({ credential: admin.credential.cert(json as any) });
   const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.enableCors();
   await app.listen(8888);
 }
