@@ -7,12 +7,12 @@ const Dashboard = () => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             user.getIdToken()
-                .then((token) =>
-                    updateUser(token, {
+                .then((token) => {
+                    getUser(token, {
                         name: "sidharth",
                         pubicKey: "0x1Dd8D38e294D632Eab2d445beAc8340462db021d",
-                    }),
-                )
+                    });
+                })
                 .then((e) => {
                     console.log(e);
                 });
