@@ -33,7 +33,7 @@ export const signInWithEmail: AuthFuncType = (email, password) => {
     return user;
 };
 
-export const useWaitForUser: WaitForUser = (route, func) => {
+export const useSubscribeToUser: WaitForUser = (route, func) => {
     const router = useRouter();
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {

@@ -11,8 +11,15 @@ import {
     Heading,
     useColorModeValue,
 } from "@chakra-ui/react";
+import { signInWithEmail, useSubscribeToUser } from "@firebase/utils";
 import NextLink from "next/link";
+import { useState } from "react";
 export default function SimpleCard() {
+    useSubscribeToUser("/dashboard");
+
+    const [email, setEmail] = useState<string | undefined>();
+    const [password, setPassword] = useState<string | undefined>();
+
     return (
         <Flex
             minH={"100vh"}
@@ -33,11 +40,19 @@ export default function SimpleCard() {
                     <Stack spacing={4}>
                         <FormControl id="email">
                             <FormLabel>Email address</FormLabel>
-                            <Input type="email" />
+                            <Input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                type="email"
+                            />
                         </FormControl>
                         <FormControl id="password">
                             <FormLabel>Password</FormLabel>
-                            <Input type="password" />
+                            <Input
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                type="password"
+                            />
                         </FormControl>
                         <Stack spacing={10}>
                             <Stack
@@ -70,7 +85,12 @@ export default function SimpleCard() {
                             </Stack>
                             <Button
                                 bg={"blue.400"}
+                                onClick={() => {
+                                    if (email && password)
+                                        signInWithEmail(email, password);
+                                }}
                                 color={"white"}
+                                disabled={!email && !password}
                                 _hover={{
                                     bg: "blue.500",
                                 }}

@@ -17,7 +17,7 @@ import {
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
-import { createUser, useWaitForUser } from "@firebase/utils";
+import { createUser, useSubscribeToUser } from "@firebase/utils";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 export default function SignupCard() {
@@ -30,7 +30,7 @@ export default function SignupCard() {
     >();
     const [loading, setLoading] = useState<boolean>(false);
 
-    useWaitForUser("/dashboard");
+    useSubscribeToUser("/dashboard");
 
     return (
         <Flex
