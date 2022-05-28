@@ -118,9 +118,9 @@ const Dashboard = () => {
                     Update
                 </Button>
                 <Text fontSize="2xl" mb={3} mt={12}>
-                    Update your Profile
+                    Your Secret Token
                 </Text>
-                <InputGroup>
+                <InputGroup maxW="500px">
                     <Input
                         value={token}
                         type={revealToken ? "text" : "password"}
