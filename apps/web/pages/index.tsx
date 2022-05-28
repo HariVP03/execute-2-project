@@ -1,16 +1,26 @@
 import React from "react";
-import { Spacer, Flex } from "@chakra-ui/react";
-
-import { Header, Main, Cards, Footer } from "@components";
+import { Flex, Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 const Home: React.FC = () => {
+    const router = useRouter();
     return (
-        <Flex direction="column" minH="100vh">
-            <Header />
-            <Main />
-            <Cards />
-            <Spacer />
-            <Footer />
+        <Flex direction="column" minH="100vh" align={"center"} justify="center">
+            <Button
+                mb="2rem"
+                onClick={() => {
+                    router.push("demo");
+                }}
+            >
+                Demo
+            </Button>
+            <Button
+                onClick={() => {
+                    router.push("wallet/login");
+                }}
+            >
+                Wallet
+            </Button>
         </Flex>
     );
 };
