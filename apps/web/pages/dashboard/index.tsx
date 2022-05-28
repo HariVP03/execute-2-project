@@ -1,6 +1,4 @@
-import axios from "axios";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useEffect } from "react";
 import { getUser } from "src/utils";
 
 const Dashboard = () => {
