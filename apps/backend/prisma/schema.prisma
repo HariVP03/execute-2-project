@@ -11,12 +11,12 @@ datasource db {
 }
 
 model User {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  email       String  @unique
-  Token       Token?
-  companyName String?
-  logo        String?
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String  @unique
+  Token     Token?
+  logo      String?
+  publicKey String?
 }
 
 model Token {

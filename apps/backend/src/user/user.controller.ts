@@ -16,16 +16,18 @@ export class UserController {
   @Get('')
   findOne(@Req() request: any) {
     if (request.user.email)
-      return this.userService.findOne(+request.user.email as any);
+      return this.userService.findOne(request.user.email as any);
     return {};
   }
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch('')
+  update(@Req() request: any, @Body() updateUserDto: UpdateUserDto) {
+    console.log(updateUserDto);
+    if (!request.user.email || Object.keys(updateUserDto).length === 0) return;
+    return this.userService.update(request.user.email, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
