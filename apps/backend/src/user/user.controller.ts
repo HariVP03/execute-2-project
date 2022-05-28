@@ -23,7 +23,6 @@ export class UserController {
 
   @Patch('')
   update(@Req() request: any, @Body() updateUserDto: UpdateUserDto) {
-    console.log(updateUserDto);
     if (!request.user.email || Object.keys(updateUserDto).length === 0) return;
     return this.userService.update(request.user.email, updateUserDto);
   }
