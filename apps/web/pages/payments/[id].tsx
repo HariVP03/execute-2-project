@@ -5,12 +5,16 @@ import {
     Image,
     Icon,
     Button,
-    Tooltip,
+    Progress,
+    chakra,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useEthers } from "@usedapp/core";
+import { useTimer } from "@hooks/timer";
+import { FC, useEffect } from "react";
+import { PaymentType } from "pages/demo";
 
-const PaymentModal = () => {
+const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
     const { account: userPublicKey, activateBrowserWallet } = useEthers();
 
     return (
@@ -22,25 +26,12 @@ const PaymentModal = () => {
             direction="column"
         >
             <Flex justify="center" w="full" bg="#feebc8" py={2} align="center">
-                <Avatar size="sm" rounded="none" />
+                <Avatar size="sm" rounded="none" src={payment.user.logo} />
                 <Text ml={2} fontWeight="normal" my={0} fontSize="lg">
-                    Company Name
+                    {payment.user.name}
                 </Text>
             </Flex>
-            <Flex w="full">
-                <Flex w="40%" h="4px" bg="green.400" />
-                <Flex w="60%" h="4px" bg="gray.300" />
-            </Flex>
-            <Flex
-                rounded="full"
-                border="1px solid"
-                py={1}
-                px={3}
-                mt={3}
-                borderColor="gray.400"
-            >
-                12:11
-            </Flex>
+            <TimeBar />
             <Flex
                 justify="center"
                 align="center"
@@ -95,7 +86,7 @@ const PaymentModal = () => {
             </Flex>
             <Flex mt={0}>
                 <Text my={0} fontSize="md" color="gray.600">
-                    Total amount: Rs 23,455
+                    Total amount: Rs {parseInt(payment.amount).toLocaleString()}
                 </Text>
             </Flex>
             {userPublicKey ? (
@@ -129,5 +120,37 @@ const PaymentModal = () => {
         </Flex>
     );
 };
-
+const TimeBar = ({ onFail }: { onFail?: () => void }) => {
+    const totalTime = 300;
+    const time = useTimer(totalTime);
+    useEffect(() => {
+        if (time === 0 && onFail) onFail();
+    }, [time]);
+    return (
+        <>
+            <Flex w="full">
+                <Progress
+                    value={(Math.abs(time - totalTime) / totalTime) * 100}
+                    h="2"
+                    w="100%"
+                />
+            </Flex>
+            <Flex
+                rounded="full"
+                border="1px solid"
+                py={1}
+                px={3}
+                mt={3}
+                justify="center"
+                borderColor="gray.400"
+                w="75px"
+            >
+                <chakra.span>
+                    {Math.floor(time / 60) || 0}:
+                    {time % 60 < 10 ? "0" + (time % 60) : time % 60}
+                </chakra.span>
+            </Flex>
+        </>
+    );
+};
 export default PaymentModal;

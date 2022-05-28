@@ -15,6 +15,7 @@
         "jsx": "preserve",
         "baseUrl": ".",
         "paths": {
+            "@hooks/*": ["src/hooks/*"],
             "@firebase/*": ["src/firebase/*"],
             "@definitions/*": ["src/definitions/*"],
             "@definitions": ["src/definitions"],

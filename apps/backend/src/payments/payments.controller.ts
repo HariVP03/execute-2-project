@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Req } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
@@ -18,6 +9,7 @@ export class PaymentsController {
 
   @Post('/onGoing/')
   create(@Req() request: any, @Body() createPaymentDto: CreatePaymentDto) {
+    console.log(request.token, createPaymentDto);
     return this.paymentsService.create(request.token, createPaymentDto.amount);
   }
 

@@ -10,6 +10,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 })
 export class PaymentsModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(TokenAuthMiddleware).forRoutes('payments/onGoing/*');
+    consumer.apply(TokenAuthMiddleware).forRoutes('payments/onGoing');
   }
 }
