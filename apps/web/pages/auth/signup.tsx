@@ -17,7 +17,9 @@ import {
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import NextLink from "next/link";
-import { createUser } from "@firebase/utils";
+import { createUser, useWaitForUser } from "@firebase/utils";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/router";
 export default function SignupCard() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [email, setEmail] = useState<string | undefined>();
@@ -26,6 +28,9 @@ export default function SignupCard() {
     const [confirmPassword, setConfirmPassword] = useState<
         string | undefined
     >();
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useWaitForUser("/dashboard");
 
     return (
         <Flex
@@ -133,9 +138,12 @@ export default function SignupCard() {
                                     (password?.length || 0) < 8
                                 }
                                 onClick={() => {
+                                    setLoading(true);
                                     if (password && email)
                                         createUser(email, password);
+                                    setLoading(false);
                                 }}
+                                isLoading={loading}
                             >
                                 Sign up
                             </Button>

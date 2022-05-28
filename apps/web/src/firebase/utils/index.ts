@@ -1,12 +1,18 @@
 import {
     createUserWithEmailAndPassword,
     getAuth,
+    onAuthStateChanged,
     signInWithEmailAndPassword,
     User,
 } from "firebase/auth";
+import { useRouter } from "next/router";
 
 type AuthFuncType = {
     (email: string, password: string): Promise<User>;
+};
+
+type WaitForUser = {
+    (route?: any, func?: () => void): void;
 };
 
 export const createUser: AuthFuncType = (email, password) => {
@@ -25,4 +31,17 @@ export const signInWithEmail: AuthFuncType = (email, password) => {
     );
 
     return user;
+};
+
+export const useWaitForUser: WaitForUser = (route, func) => {
+    const router = useRouter();
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        if (user)
+            if (func) {
+                func();
+            } else {
+                router.push(route);
+            }
+    });
 };
