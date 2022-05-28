@@ -11,6 +11,7 @@ import {
     Heading,
     useColorModeValue,
 } from "@chakra-ui/react";
+import { GoogleButton } from "@components/buttons";
 import { signInWithEmail, useSubscribeToUser } from "@firebase/utils";
 import NextLink from "next/link";
 import { useState } from "react";
@@ -63,10 +64,28 @@ export default function SimpleCard() {
                                 <Checkbox>Remember me</Checkbox>
                                 <Link color={"blue.400"}>Forgot password?</Link>
                             </Stack>
+                            <Flex direction="column" gap={4}>
+                                <Button
+                                    bg={"blue.400"}
+                                    onClick={() => {
+                                        if (email && password)
+                                            signInWithEmail(email, password);
+                                    }}
+                                    color={"white"}
+                                    size="lg"
+                                    disabled={!email && !password}
+                                    _hover={{
+                                        bg: "blue.500",
+                                    }}
+                                >
+                                    Sign in
+                                </Button>
+                                <GoogleButton />
+                            </Flex>
                             <Stack
                                 direction={{ base: "column", sm: "row" }}
                                 align={"start"}
-                                justify={"space-between"}
+                                justify={"center"}
                             >
                                 <span color={"blue.400"}>
                                     Don't have an account?{" "}
@@ -83,20 +102,6 @@ export default function SimpleCard() {
                                     </NextLink>
                                 </span>
                             </Stack>
-                            <Button
-                                bg={"blue.400"}
-                                onClick={() => {
-                                    if (email && password)
-                                        signInWithEmail(email, password);
-                                }}
-                                color={"white"}
-                                disabled={!email && !password}
-                                _hover={{
-                                    bg: "blue.500",
-                                }}
-                            >
-                                Sign in
-                            </Button>
                         </Stack>
                     </Stack>
                 </Box>

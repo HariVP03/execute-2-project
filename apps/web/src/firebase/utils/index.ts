@@ -1,8 +1,10 @@
 import {
     createUserWithEmailAndPassword,
     getAuth,
+    GoogleAuthProvider,
     onAuthStateChanged,
     signInWithEmailAndPassword,
+    signInWithPopup,
     User,
 } from "firebase/auth";
 import { useRouter } from "next/router";
@@ -31,6 +33,13 @@ export const signInWithEmail: AuthFuncType = (email, password) => {
     );
 
     return user;
+};
+
+export const signInWithGoogle = () => {
+    const auth = getAuth();
+    const googleProvider = new GoogleAuthProvider();
+
+    return signInWithPopup(auth, googleProvider);
 };
 
 export const useSubscribeToUser: WaitForUser = (route, func) => {
