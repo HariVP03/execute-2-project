@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware, HttpStatus } from '@nestjs/common';
 import admin from 'firebase-admin';
 @Injectable()
 export class FirebaseAuthMiddleware implements NestMiddleware {
@@ -15,6 +15,8 @@ export class FirebaseAuthMiddleware implements NestMiddleware {
         console.log(err);
         return;
       }
+    } else {
+      res.status(HttpStatus.FORBIDDEN, 'unauthorised access');
     }
     console.log('sexy b=uoy');
     next();

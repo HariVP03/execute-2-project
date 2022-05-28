@@ -9,6 +9,6 @@ import { FirebaseAuthMiddleware } from 'src/firebase-auth.middleware';
 })
 export class UserModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(FirebaseAuthMiddleware).forRoutes('*');
+    consumer.apply(FirebaseAuthMiddleware).forRoutes('user');
   }
 }
