@@ -33,7 +33,10 @@ export class PaymentsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentsService.update(id, updatePaymentDto);
+    if (updatePaymentDto.status === 'SUCCESS')
+      if (Object.keys(updatePaymentDto).length === 6)
+        return this.paymentsService.update(id, updatePaymentDto);
+    throw new Error('required data not provided');
   }
 
   @Delete(':id')
