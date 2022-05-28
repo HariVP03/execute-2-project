@@ -13,12 +13,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
   @Get('')
   findOne(@Req() request: any) {
     if (request.user.email)
       return this.userService.findOne(request.user.email as any);
     return {};
   }
+
   @Patch('')
   update(@Req() request: any, @Body() updateUserDto: UpdateUserDto) {
     console.log(updateUserDto);
