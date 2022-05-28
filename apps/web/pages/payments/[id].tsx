@@ -1,13 +1,17 @@
-import { Avatar, Flex, Text, Image, Icon, Button } from "@chakra-ui/react";
+import {
+    Avatar,
+    Flex,
+    Text,
+    Image,
+    Icon,
+    Button,
+    Tooltip,
+} from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/router";
+import { useEthers } from "@usedapp/core";
 
 const PaymentModal = () => {
-    const router = useRouter();
-
-    const { id, status, amount } = router.query;
-
-    console.log(router.query);
+    const { account: userPublicKey, activateBrowserWallet } = useEthers();
 
     return (
         <Flex
@@ -94,11 +98,33 @@ const PaymentModal = () => {
                     Total amount: Rs 23,455
                 </Text>
             </Flex>
-            <Button fontWeight="600" mt={12} bg="blue.500" color="white">
-                Send Transaction Request
-            </Button>
+            {userPublicKey ? (
+                <Button
+                    fontWeight="600"
+                    mt={12}
+                    _hover={{ bg: "blue.600" }}
+                    bg="blue.500"
+                    color="white"
+                >
+                    Send Transaction Request
+                </Button>
+            ) : (
+                <Button
+                    onClick={activateBrowserWallet}
+                    fontWeight="600"
+                    mt={12}
+                    _hover={{ bg: "blue.600" }}
+                    bg="blue.500"
+                    color="white"
+                >
+                    Connect Metamask Wallet
+                </Button>
+            )}
+
             <Flex my="auto">
-                <Text color="gray.500">Payments secured by YonkoPay</Text>
+                <Text fontSize="sm" color="gray.500">
+                    Payments secured by YonkoPay
+                </Text>
             </Flex>
         </Flex>
     );
