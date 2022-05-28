@@ -7,11 +7,15 @@ import {
     Input,
     InputGroup,
     InputLeftAddon,
+    InputLeftElement,
+    InputRightElement,
     Table,
     Td,
     Text,
     Th,
     Tr,
+    useClipboard,
+    useToast,
     VisuallyHidden,
 } from "@chakra-ui/react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -22,13 +26,20 @@ import { getToken, getUser, updateUser } from "src/utils";
 
 const Dashboard = () => {
     const auth = getAuth();
-    const [token, setToken] = useState<any>();
+    const [uid, setUid] = useState<any>();
+    const [token, setToken] = useState<string | undefined>();
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                user.getIdToken().then((token) => {
-                    setToken(token);
-                    getUser(token).then(({ data }) => {
+                user.getIdToken().then((r) => {
+                    setUid(r);
+                    getToken(r).then(({ data }) => {
+                        setToken(data.token);
+                    });
+
+                    getUser(r).then(({ data }) => {
+                        console.log(data);
                         setLogo(data.logo);
                         setName(data.name);
                         setPublicKey(data.publicKey);
@@ -42,11 +53,20 @@ const Dashboard = () => {
     const [publicKey, setPublicKey] = useState<string | undefined>();
     const [logo, setLogo] = useState<string | undefined>();
 
+    const [revealToken, setRevealToken] = useState<boolean>(false);
+
     const onSubmit = () => {
-        updateUser(token, { name, logo, publicKey }).then(({ data }) => {
+        updateUser(uid, { name, logo, publicKey }).then(({ data }) => {
             console.log(data);
         });
     };
+
+    const { hasCopied, onCopy } = useClipboard(token || "");
+
+    const tokenCopied = useToast({
+        title: "Token copied to clipboard",
+        status: "success",
+    });
 
     return (
         <Flex fontFamily="Poppins" minH="100vh" w="100vw" justify="center">
@@ -97,7 +117,31 @@ const Dashboard = () => {
                 >
                     Update
                 </Button>
-                <Text fontSize="2xl" mt={12}>
+                <Text fontSize="2xl" mb={3} mt={12}>
+                    Update your Profile
+                </Text>
+                <InputGroup>
+                    <Input
+                        value={token}
+                        type={revealToken ? "text" : "password"}
+                        readOnly
+                        mt={0}
+                        cursor="pointer"
+                        onClick={() => {
+                            tokenCopied();
+                            onCopy();
+                        }}
+                    />
+                    <InputRightElement justifyContent="flex-end" w="100px">
+                        <Button
+                            onClick={() => setRevealToken((prev) => !prev)}
+                            _focus={{ outline: "none" }}
+                        >
+                            Show
+                        </Button>
+                    </InputRightElement>
+                </InputGroup>
+                <Text mb={0} fontSize="2xl" mt={12}>
                     Transaction History
                 </Text>
                 <Table variant="striped">
