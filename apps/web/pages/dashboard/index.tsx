@@ -12,31 +12,41 @@ import {
     Text,
     Th,
     Tr,
+    VisuallyHidden,
 } from "@chakra-ui/react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { Dispatch, SetStateAction, useState } from "react";
+import { ref } from "firebase/storage";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
-import { getUser, updateUser } from "src/utils";
+import { getToken, getUser, updateUser } from "src/utils";
 
 const Dashboard = () => {
     const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            user.getIdToken()
-                .then((token) => {
-                    getUser(token, {
-                        name: "sidharth",
-                        pubicKey: "0x1Dd8D38e294D632Eab2d445beAc8340462db021d",
+    const [token, setToken] = useState<any>();
+    useEffect(() => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                user.getIdToken().then((token) => {
+                    setToken(token);
+                    getUser(token).then(({ data }) => {
+                        setLogo(data.logo);
+                        setName(data.name);
+                        setPublicKey(data.publicKey);
                     });
-                })
-                .then((e) => {
-                    console.log(e);
                 });
-        }
-    });
+            }
+        });
+    }, []);
 
     const [name, setName] = useState<string | undefined>();
-    const [publicAddress, setPublicAddress] = useState<string | undefined>();
+    const [publicKey, setPublicKey] = useState<string | undefined>();
+    const [logo, setLogo] = useState<string | undefined>();
+
+    const onSubmit = () => {
+        updateUser(token, { name, logo, publicKey }).then(({ data }) => {
+            console.log(data);
+        });
+    };
 
     return (
         <Flex fontFamily="Poppins" minH="100vh" w="100vw" justify="center">
@@ -45,7 +55,22 @@ const Dashboard = () => {
                     Update your Profile
                 </Text>
                 <Flex gap={5} align="center" w="400px">
-                    <Avatar rounded="none" size="xl" />
+                    <Flex direction="column" maxW="100px">
+                        <Avatar
+                            cursor="pointer"
+                            rounded="none"
+                            h="100px"
+                            src={logo || ""}
+                            bg={logo ? "white" : "Background"}
+                            w="100px"
+                        />
+                        <Input
+                            value={logo}
+                            onChange={(e) => setLogo(e.target.value)}
+                            placeholder="Link to the logo"
+                            type="text"
+                        />
+                    </Flex>
                     <InputField
                         state={name}
                         setState={setName}
@@ -56,14 +81,20 @@ const Dashboard = () => {
                 </Flex>
                 <Flex gap={5} mt={9} align="center" w="400px">
                     <InputField
-                        state={publicAddress}
-                        setState={setPublicAddress}
+                        state={publicKey}
+                        setState={setPublicKey}
                         placeholder="Update your public address"
                         title="Public Address"
                         w="100%"
                     />
                 </Flex>
-                <Button mt={12} bg="blue.300" _hover={{ bg: "blue.400" }}>
+                <Button
+                    disabled={!name || !logo || !publicKey}
+                    mt={12}
+                    bg="blue.300"
+                    onClick={onSubmit}
+                    _hover={{ bg: "blue.400" }}
+                >
                     Update
                 </Button>
                 <Text fontSize="2xl" mt={12}>
@@ -115,7 +146,9 @@ const InputField: React.FC<{
                     focusBorderColor="brand.400"
                     rounded="md"
                     value={state}
-                    onChange={(e) => setState?.(e.target.value)}
+                    onChange={
+                        setState ? (e) => setState(e.target.value) : undefined
+                    }
                     w={w || "300px"}
                 />
             </InputGroup>

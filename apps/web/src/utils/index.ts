@@ -8,8 +8,16 @@ export const getUser = (token: string) => {
     });
 };
 
+export const getToken = (token: string) => {
+    return axios.get("/token", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
 export const updateUser = (token: string, userData: any) => {
-    return axios.post("/user", userData, {
+    return axios.patch("/user", userData, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
