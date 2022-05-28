@@ -8,15 +8,28 @@ import { Hydrate } from "react-query/hydration";
 import { RecoilRoot } from "recoil";
 import "@firebase/init";
 import axios from "axios";
+import { Mainnet, DAppProvider, Config } from "@usedapp/core";
+import { getDefaultProvider } from "ethers";
+
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const queryClient = new QueryClient();
     axios.defaults.baseURL = "http://localhost:8888";
+
+    const config: Config = {
+        readOnlyChainId: Mainnet.chainId,
+        readOnlyUrls: {
+            [Mainnet.chainId]: getDefaultProvider("mainnet"),
+        },
+    };
+
     return (
         <ChakraProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Hydrate state={pageProps.dehydratedState}>
                     <RecoilRoot>
-                        <Component {...pageProps} />
+                        <DAppProvider config={config}>
+                            <Component {...pageProps} />
+                        </DAppProvider>
                     </RecoilRoot>
                 </Hydrate>
             </QueryClientProvider>
