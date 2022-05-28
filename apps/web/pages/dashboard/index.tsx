@@ -7,11 +7,11 @@ const Dashboard = () => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            user.getIdToken().then((token) => {
-                getUser(token).then((e) => {
+            user.getIdToken()
+                .then((token) => getUser(token))
+                .then((e) => {
                     console.log(e);
                 });
-            });
         }
     });
 
