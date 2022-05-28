@@ -1,10 +1,18 @@
-import { Button } from "ui";
+import React from "react";
+import { Spacer, Flex } from "@chakra-ui/react";
 
-export default function Web() {
-  return (
-    <div>
-      <h1>Web</h1>
-      <Button />
-    </div>
-  );
-}
+import { Header, Main, Cards, Footer } from "@components";
+
+const Home: React.FC = () => {
+    return (
+        <Flex direction="column" minH="100vh">
+            <Header />
+            <Main />
+            <Cards />
+            <Spacer />
+            <Footer />
+        </Flex>
+    );
+};
+
+export default Home;

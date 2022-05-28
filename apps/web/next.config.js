@@ -1,5 +1,3 @@
-const withTM = require("next-transpile-modules")(["ui"]);
+const withPlugins = require("next-compose-plugins");
 
-module.exports = withTM({
-  reactStrictMode: true,
-});
+module.exports = withPlugins([], {});
