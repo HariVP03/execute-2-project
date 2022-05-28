@@ -49,6 +49,7 @@ export function Navbar() {
                 >
                     <IconButton
                         size={"md"}
+                        colorScheme="orange"
                         icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
                         aria-label={"Open Menu"}
                         display={{ md: "none" }}
@@ -115,7 +116,9 @@ export function Navbar() {
                     <Box pb={4} display={{ md: "none" }}>
                         <Stack as={"nav"} spacing={4}>
                             {Links.map((link) => (
-                                <NavLink key={link}>{link}</NavLink>
+                                <NavLink key={link.link} href={link.link}>
+                                    {link.title}
+                                </NavLink>
                             ))}
                         </Stack>
                     </Box>

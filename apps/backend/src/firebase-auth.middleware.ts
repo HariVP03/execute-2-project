@@ -3,22 +3,22 @@ import admin from 'firebase-admin';
 @Injectable()
 export class FirebaseAuthMiddleware implements NestMiddleware {
   async use(req: any, res: any, next: () => void) {
-    const header = req.headers?.authorization;
+    console.log('sex');
     if (
-      header !== 'Bearer null' &&
+      req.headers?.authorization !== 'Bearer null' &&
       req.headers?.authorization?.startsWith('Bearer ')
     ) {
       const idToken = req.headers.authorization.split('Bearer ')[1];
       try {
         req.user = await admin.auth().verifyIdToken(idToken);
+        return next();
       } catch (err) {
-        console.log(err);
+        res.status(HttpStatus.FORBIDDEN).send('token invalid');
         return;
       }
     } else {
       res.status(HttpStatus.FORBIDDEN).send('token invalid');
     }
-    console.log('sexy b=uoy');
-    next();
+    res.status(HttpStatus.FORBIDDEN).send('token invalid');
   }
 }
