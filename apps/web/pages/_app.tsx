@@ -6,7 +6,7 @@ import "@styles/global.scss";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { RecoilRoot } from "recoil";
-
+import "@firebase/init";
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const queryClient = new QueryClient();
     return (
