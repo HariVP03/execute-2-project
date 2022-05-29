@@ -44,4 +44,5 @@ model Payment {
   crypto          String?
   cryptoAmount    String?
   status          PaymentStatus @default(INITIATED)
+  created_at      DateTime      @default(now())
 }

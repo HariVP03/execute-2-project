@@ -50,7 +50,7 @@ const PaymentModal: FC<{
             direction="column"
         >
             <Flex justify="center" w="full" bg="#feebc8" py={2} align="center">
-                <Avatar size="sm" rounded="none" src={payment.user.logo} />
+                <Avatar size="sm" src={payment.user.logo} />
                 <Text ml={2} fontWeight="normal" my={0} fontSize="lg">
                     {payment.user.name}
                 </Text>

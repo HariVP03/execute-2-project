@@ -34,6 +34,7 @@ export class PaymentsService {
   async findAll(publicKey: string) {
     const payements = await this.prisma.payment.findMany({
       where: { to: publicKey },
+      orderBy: { created_at: 'desc' },
     });
     return payements;
   }

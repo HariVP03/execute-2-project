@@ -17,7 +17,9 @@ export const getToken = (token: string) => {
         },
     });
 };
-
+export const getPayments = (publicKey: string) => {
+    return axios.get("/payments/" + publicKey);
+};
 export const updateUser = (token: string, userData: any) => {
     return axios.patch("/user", userData, {
         headers: {
