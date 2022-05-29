@@ -9,13 +9,37 @@ import {
     chakra,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { useEthers } from "@usedapp/core";
+import { useEthers, useSendTransaction } from "@usedapp/core";
 import { useTimer } from "@hooks/timer";
 import { FC, useEffect } from "react";
 import { PaymentType } from "pages/demo";
+import { utils } from "ethers";
+import { BigNumber, ethers } from "@usedapp/core/node_modules/ethers";
+import { getProvider } from "src/utils";
 
-const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
+const PaymentModal: FC<{
+    payment: PaymentType;
+    gasPrice: string;
+    amountInEth: number;
+}> = ({ payment, gasPrice, amountInEth }) => {
+    const { sendTransaction } = useSendTransaction();
+
     const { account: userPublicKey, activateBrowserWallet } = useEthers();
+
+    const shortAmountInEth = amountInEth.toFixed(3);
+
+    const onClickSend = async () => {
+        const provider = getProvider();
+        const nonce = await provider.getTransactionCount(
+            userPublicKey || "",
+            "latest",
+        );
+        sendTransaction({
+            to: payment.to,
+            value: ethers.utils.parseEther(shortAmountInEth),
+            nonce,
+        });
+    };
 
     return (
         <Flex fontFamily="Poppins" align="center" w="100vw" direction="column">
@@ -54,7 +78,7 @@ const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
             </Flex>
             <Flex mt={3}>
                 <Text fontSize="4xl" fontWeight="500">
-                    0.0136 ETH
+                    {shortAmountInEth} MATIC
                 </Text>
             </Flex>
             <Flex
@@ -70,12 +94,12 @@ const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
                 cursor="pointer"
                 borderColor="gray.400"
             >
-                Ethereum
+                Polygon
                 <Icon ml={1} as={ChevronDownIcon} />
             </Flex>
             <Flex mt={5}>
                 <Text fontSize="sm" color="gray.600">
-                    Current gas price: 0.00001 ETH
+                    Current gas price: {gasPrice} ETH
                 </Text>
             </Flex>
             <Flex mt={0}>
@@ -90,6 +114,9 @@ const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
                     _hover={{ bg: "blue.600" }}
                     bg="blue.500"
                     color="white"
+                    onClick={() => {
+                        onClickSend();
+                    }}
                 >
                     Send Transaction Request
                 </Button>
@@ -107,7 +134,11 @@ const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
             )}
 
             <Flex my="auto">
-                <Text fontSize="sm" color="gray.500">
+                <Text
+                    fontSize="sm"
+                    color="gray.500"
+                    onClick={() => onClickSend()}
+                >
                     Payments secured by YonkoPay
                 </Text>
             </Flex>
