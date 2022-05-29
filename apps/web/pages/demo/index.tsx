@@ -79,9 +79,9 @@ const PaymentPage: FC<{ payment: PaymentType }> = ({ payment }) => {
     return (
         <Modal isOpen={true} onClose={() => {}}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent top={"0"}>
                 <ModalBody p="0">
-                    <Flex h="700px">
+                    <Flex h="85vh">
                         <PaymentPageWithId payment={payment} />
                     </Flex>
                 </ModalBody>

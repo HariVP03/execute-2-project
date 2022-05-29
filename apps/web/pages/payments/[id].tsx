@@ -18,13 +18,7 @@ const PaymentModal: FC<{ payment: PaymentType }> = ({ payment }) => {
     const { account: userPublicKey, activateBrowserWallet } = useEthers();
 
     return (
-        <Flex
-            fontFamily="Poppins"
-            align="center"
-            w="100vw"
-            h="100vh"
-            direction="column"
-        >
+        <Flex fontFamily="Poppins" align="center" w="100vw" direction="column">
             <Flex justify="center" w="full" bg="#feebc8" py={2} align="center">
                 <Avatar size="sm" src={payment.user.logo} />
                 <Text ml={2} fontWeight="normal" my={0} fontSize="lg">
