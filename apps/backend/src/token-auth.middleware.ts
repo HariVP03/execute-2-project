@@ -16,7 +16,7 @@ export class TokenAuthMiddleware implements NestMiddleware {
         const t = await this.prisma.token.findUnique({ where: { token } });
         console.log(token);
         req.token = t;
-        console.log(t);
+        console.log({ t });
         if (t) return next();
         else res.status(HttpStatus.FORBIDDEN).send('token invalid');
       } catch (err) {

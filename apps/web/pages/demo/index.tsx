@@ -76,12 +76,15 @@ const DemoPage: FC<DemoPageProps> = () => {
                 </FormControl>
                 <Button onClick={submit}>Submit</Button>
             </VStack>
-            {showPay ? <PaymentPage payment={showPay} /> : <></>}
+            {showPay ? <PaymentPage payment={showPay} token={token} /> : <></>}
         </Flex>
     );
 };
 
-const PaymentPage: FC<{ payment: PaymentType }> = ({ payment }) => {
+const PaymentPage: FC<{ payment: PaymentType; token: string }> = ({
+    payment,
+    token,
+}) => {
     const [gasPrice, setGasPrice] = useState<string>("0");
     const [conversionRate, setConversionRate] = useState<number>(0);
 
@@ -109,6 +112,7 @@ const PaymentPage: FC<{ payment: PaymentType }> = ({ payment }) => {
                 <ModalBody p="0">
                     <Flex h="85vh">
                         <PaymentPageWithId
+                            token={token}
                             payment={payment}
                             gasPrice={gasPrice}
                             amountInEth={

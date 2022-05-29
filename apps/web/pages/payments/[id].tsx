@@ -7,25 +7,28 @@ import {
     Button,
     Progress,
     chakra,
+    Spinner,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { useEthers, useSendTransaction } from "@usedapp/core";
 import { useTimer } from "@hooks/timer";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { PaymentType } from "pages/demo";
-import { utils } from "ethers";
-import { BigNumber, ethers } from "@usedapp/core/node_modules/ethers";
-import { getProvider } from "src/utils";
+import { ethers } from "@usedapp/core/node_modules/ethers";
+import { getProvider, updatepayment } from "src/utils";
+import { FiCheck, FiSend, FiX } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 const PaymentModal: FC<{
     payment: PaymentType;
     gasPrice: string;
     amountInEth: number;
-}> = ({ payment, gasPrice, amountInEth }) => {
-    const { sendTransaction } = useSendTransaction();
-
+    token: string;
+}> = ({ payment, gasPrice, amountInEth, token }) => {
+    const { sendTransaction, state } = useSendTransaction();
+    console.log(state);
     const { account: userPublicKey, activateBrowserWallet } = useEthers();
-
+    const router = useRouter();
     const shortAmountInEth = amountInEth.toFixed(3);
 
     const onClickSend = async () => {
@@ -40,7 +43,51 @@ const PaymentModal: FC<{
             nonce,
         });
     };
-
+    useEffect(() => {
+        if (state.status === "Success" || state.status === "Fail") {
+            console.log({ token });
+            const obj = {
+                from: userPublicKey || "",
+                transactionHash: state.transaction?.hash || "",
+                crypto: "MATIC",
+                chain: "Polygon Mumbai" || "",
+                cryptoAmount: state.transaction?.value.toString() || "",
+                status: state.status === "Success" ? "SUCCESS" : "FAILED",
+            };
+            console.log(obj);
+            updatepayment(token, payment.id, obj).then(() => {
+                router.push("auth/login");
+            });
+        }
+    }, [state]);
+    const stateCheck = useMemo(() => {
+        return state.status === "Success"
+            ? 1
+            : state.status === "Fail"
+            ? 2
+            : state.status === "None"
+            ? 3
+            : 0;
+    }, [state]);
+    const dataObj = useMemo(() => {
+        return {
+            icon: stateCheck === 1 ? FiCheck : stateCheck === 2 ? FiX : FiSend,
+            color:
+                stateCheck === 1
+                    ? "green.500"
+                    : stateCheck === 2
+                    ? "red.500"
+                    : "black",
+            text:
+                stateCheck === 0
+                    ? "loading"
+                    : stateCheck === 1
+                    ? "Success"
+                    : stateCheck === 2
+                    ? "Failed"
+                    : "Request not sent",
+        };
+    }, [stateCheck]);
     return (
         <Flex fontFamily="Poppins" align="center" w="100vw" direction="column">
             <Flex justify="center" w="full" bg="#feebc8" py={2} align="center">
@@ -60,12 +107,16 @@ const PaymentModal: FC<{
                 // bg="gray.200"
                 rounded="lg"
             >
-                <Image
-                    h="100px"
-                    p={5}
-                    w="100px"
-                    src="https://www.svgrepo.com/show/294649/send.svg"
-                />
+                {stateCheck != 0 ? (
+                    <Icon
+                        as={dataObj.icon}
+                        color={dataObj.color}
+                        height="100px"
+                        width={"100px"}
+                    />
+                ) : (
+                    <Spinner h={"100px"} w="100px" />
+                )}
                 <Text
                     fontWeight="normal"
                     w="full"
@@ -73,7 +124,7 @@ const PaymentModal: FC<{
                     color="gray.700"
                     textAlign="center"
                 >
-                    Request not sent
+                    {dataObj.text}
                 </Text>
             </Flex>
             <Flex mt={3}>

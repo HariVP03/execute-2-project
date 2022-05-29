@@ -204,12 +204,15 @@ const Dashboard = () => {
                                         {shortenIfAddress(item.from) || "NULL"}
                                     </Td>
                                     <Td>{shortenIfAddress(item.to)}</Td>
-                                    <Td>{item.cryptoAmount || 0.0}</Td>
+                                    <Td>{+item.cryptoAmount / 1e18 || 0.0}</Td>
                                     <Td>{item.amount}</Td>
                                     <Td>
-                                        {shortenIfAddress(
-                                            item.transactionHash,
-                                        ) || "NULL"}
+                                        {item.transactionHash
+                                            ? item.transactionHash?.substring(
+                                                  0,
+                                                  5,
+                                              ) + "..."
+                                            : "NULL"}
                                     </Td>
                                     <Td>{success ? "SUCCESS" : "FAILED"}</Td>
                                 </Tr>

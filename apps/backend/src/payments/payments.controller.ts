@@ -25,9 +25,8 @@ export class PaymentsController {
 
   @Patch('/onGoing/:id')
   update(@Param('id') id: string, @Body() updatePaymentDto: UpdatePaymentDto) {
-    if (updatePaymentDto.status === 'SUCCESS')
-      if (Object.keys(updatePaymentDto).length === 6)
-        return this.paymentsService.update(id, updatePaymentDto);
-    throw new Error('required data not provided');
+    console.log(updatePaymentDto);
+    return this.paymentsService.update(id, updatePaymentDto);
+    // throw new Error('required data not provided');
   }
 }

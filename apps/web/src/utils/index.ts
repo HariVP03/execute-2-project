@@ -17,6 +17,24 @@ export const getToken = (token: string) => {
         },
     });
 };
+export const updatepayment: any = (
+    token: string,
+    id: string,
+    payment: {
+        from: string;
+        transactionHash: string;
+        crypto: string;
+        chain: string;
+        cryptoAmount: string;
+        status: "FAILED" | "SUCCESS";
+    },
+) => {
+    return axios.patch("/payments/onGoing/" + id, payment, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
 export const getPayments = (publicKey: string) => {
     return axios.get("/payments/" + publicKey);
 };

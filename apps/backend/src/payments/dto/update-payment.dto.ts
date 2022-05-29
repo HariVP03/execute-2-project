@@ -21,6 +21,7 @@ export class UpdatePaymentDto extends PartialType(CreatePaymentDto) {
   @IsOptional()
   @IsString()
   cryptoAmount: string;
-  @IsEnum(paymentStatus)
+  @IsOptional()
+  @IsString()
   status: 'FAILED' | 'SUCCESS';
 }

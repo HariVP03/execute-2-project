@@ -24,7 +24,6 @@ export function TeamCard({
     brand: string;
     pic: string;
 }) {
-    pic = IMAGE;
     return (
         <Center p={12} overflow="visible">
             <Box
@@ -89,19 +88,19 @@ export function TeamCard({
                     >
                         {name}
                     </Heading>
-                    <Stack direction={"row"} align={"center"}>
+                    {/* <Stack direction={"row"} align={"center"}>
                         <Text fontWeight={800} fontSize={"xl"}>
                             ${price}
                         </Text>
-                    </Stack>
+                    </Stack> */}
                 </Stack>
             </Box>
         </Center>
     );
 }
 const teamDetail = [
-    { name: "Sidharth Sahni", price: 400, pic: "/icons/logo.png" },
-    { name: "Hari Vishnu Parashar", price: 4, pic: "icons/logo.png" },
+    { name: "Sidharth Sahni", price: 400, pic: "/icons/sid.jpeg" },
+    { name: "Hari Vishnu Parashar", price: 4, pic: "icons/hari.jpeg" },
 ];
 export function TeamPage() {
     return (
