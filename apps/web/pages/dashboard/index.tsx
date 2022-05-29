@@ -122,6 +122,7 @@ const Dashboard = () => {
                             h="125px"
                             mt="-75"
                             cursor="pointer"
+                            objectFit="cover"
                             borderRadius={"full"}
                             src={user?.logo || ""}
                             bg={user?.logo ? "white" : "Background"}
