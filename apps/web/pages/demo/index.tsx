@@ -11,10 +11,15 @@ import {
     ModalOverlay,
     VStack,
 } from "@chakra-ui/react";
+import { useSendTransaction } from "@usedapp/core";
 import axios from "axios";
-import { FC, useState } from "react";
+import { BigNumber } from "ethers";
+import { FC, useEffect, useState } from "react";
+import { getConversionRate, getGasPrice } from "src/utils";
 import PaymentPageWithId from "../payments/[id]";
+
 interface DemoPageProps {}
+
 export type UserType = {
     email: string;
     id: string;
@@ -47,6 +52,7 @@ const DemoPage: FC<DemoPageProps> = () => {
         );
         setShowPay(payment.data as any);
     }
+
     return (
         <Flex h="100vh" align="center" justify="center">
             <VStack spacing={6}>
@@ -76,13 +82,39 @@ const DemoPage: FC<DemoPageProps> = () => {
 };
 
 const PaymentPage: FC<{ payment: PaymentType }> = ({ payment }) => {
+    const [gasPrice, setGasPrice] = useState<string>("0");
+    const [conversionRate, setConversionRate] = useState<number>(0);
+
+    // console.log(getConversionRate());
+    useEffect(() => {
+        getGasPrice(
+            payment.to || "0xb91CC1FBCA90301807DF4B98f5A04f7Ce62a3806",
+        ).then(({ data }) => {
+            // console.log(data);
+            const { result } = data;
+            const gas = (parseInt(result, 16) / 1e18).toFixed(18);
+            setGasPrice(gas);
+        });
+
+        getConversionRate().then(({ INR }) => {
+            // console.log(e.INR);
+            setConversionRate(INR);
+        });
+    }, []);
+
     return (
         <Modal isOpen={true} onClose={() => {}}>
             <ModalOverlay />
             <ModalContent>
                 <ModalBody p="0">
-                    <Flex h="700px">
-                        <PaymentPageWithId payment={payment} />
+                    <Flex overflowY="hidden" h="700px">
+                        <PaymentPageWithId
+                            gasPrice={gasPrice}
+                            payment={payment}
+                            amountInEth={
+                                parseFloat(payment.amount) / conversionRate
+                            }
+                        />
                     </Flex>
                 </ModalBody>
             </ModalContent>

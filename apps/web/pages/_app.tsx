@@ -10,15 +10,17 @@ import "@firebase/init";
 import axios from "axios";
 import { Mainnet, DAppProvider, Config } from "@usedapp/core";
 import { getDefaultProvider } from "ethers";
+import { alchemyConfig } from "src/utils/config";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
     const queryClient = new QueryClient();
     axios.defaults.baseURL = "http://localhost:8888";
 
     const config: Config = {
-        readOnlyChainId: Mainnet.chainId,
+        readOnlyChainId: 80001,
         readOnlyUrls: {
-            [Mainnet.chainId]: getDefaultProvider("mainnet"),
+            137: getDefaultProvider(),
+            80001: alchemyConfig.maticmum.url,
         },
     };
 
